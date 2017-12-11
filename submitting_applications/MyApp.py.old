@@ -1,0 +1,32 @@
+"""MyApp.py
+"""
+
+
+def runApp(filename):
+    from pyspark import SparkContext
+    from MyFunctions import splitLine
+    from MyFunctions import notEmpty
+    from MyFunctions import initCount
+    from MyFunctions import accumulate
+
+    sc = SparkContext('local', 'My App')
+    textFile = sc.textFile(filename)
+
+    wordCounts = textFile.flatMap(splitLine)      \
+                         .filter(notEmpty)        \
+                         .map(initCount)          \
+                         .reduceByKey(accumulate) \
+                         .sortBy(lambda pair: -pair[1])
+    print(wordCounts.take(10))
+
+    sc.stop()
+
+
+if __name__ == '__main__':
+    from sys import argv
+
+    if len(argv) > 1:
+        filename = argv[1]
+        runApp(filename)
+    else:
+        print('Usage: %s filename' % argv[0])

@@ -1,0 +1,18 @@
+"""MyFunctions.py
+"""
+
+
+def splitLine(line, delimiter=' '):
+    return line.split(delimiter)
+
+
+def notEmpty(word):
+    return word != ''
+
+
+def initCount(word):
+    return (word, 1)
+
+
+def accumulate(count1, count2):
+    return count1 + count2
